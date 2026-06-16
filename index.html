@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Athenaeum | Premium Study Space</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* PRIMARY COLOR: BLACK */
+    --bg-base: #000000;
+    --bg-surface: #0a0a0a;
+    --bg-surface-hover: #141414;
+    
+    /* SECONDARY COLOR: WHITE */
+    --text-main: #ffffff;
+    --text-muted: #a1a1aa;
+    --border-color: rgba(255, 255, 255, 0.15);
+    
+    /* SUPPORTIVE COLOR: RUSTY ORANGE */
+    --accent: #E85D04; 
+    --accent-glow: rgba(232, 93, 4, 0.2);
+    
+    --font-display: 'Syne', sans-serif;
+    --font-sans: 'Inter', sans-serif;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px; 
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--bg-base);
+    color: var(--text-main);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  /* --- NAVIGATION --- */
+  nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 1.2rem 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .logo {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1001;
+  }
+  
+  .logo-accent {
+    color: var(--accent);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+  }
+
+  .nav-links a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--accent);
+  }
+
+  /* Mobile Menu Toggle */
+  .menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    z-index: 1001;
+  }
+
+  .menu-toggle span {
+    width: 30px;
+    height: 2px;
+    background: var(--text-main);
+    transition: 0.3s ease;
+  }
+
+  /* Mobile Overlay */
+  .mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: var(--bg-base);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+
+  .mobile-menu-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .mobile-menu-overlay a {
+    font-family: var(--font-display);
+    font-size: 2.5rem;
+    color: var(--text-muted);
+  }
+
+  .mobile-menu-overlay a:hover {
+    color: var(--accent);
+  }
+
+  /* --- BUTTONS --- */
+  .btn {
+    padding: 1rem 2rem;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-block;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+  }
+
+  .btn-primary:hover {
+    background: #ff6b0f;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px var(--accent-glow);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-main);
+    border: 1px solid rgba(255,255,255,0.4);
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232, 93, 4, 0.05);
+  }
+
+  /* --- HERO SECTION --- */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 5%;
+    position: relative;
+    padding-top: 100px;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    right: 5%;
+    width: 50vw;
+    height: 50vw;
+    background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+    border-radius: 50%;
+    z-index: -1;
+    filter: blur(80px);
+  }
+
+  .hero h1 {
+    font-size: clamp(3rem, 10vw, 8rem);
+    letter-spacing: -2px;
+    margin-bottom: 1.5rem;
+    max-width: 1200px;
+    line-height: 1.05;
+  }
+
+  .hero p {
+    font-size: clamp(1rem, 2vw, 1.4rem);
+    color: var(--text-muted);
+    max-width: 600px;
+    margin-bottom: 3rem;
+  }
+
+  .cta-group {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  /* --- MARQUEE / TICKER --- */
+  .marquee-wrapper {
+    background: var(--accent);
+    color: #fff;
+    padding: 1rem 0;
+    overflow: hidden;
+    display: flex;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1rem;
+    letter-spacing: 2px;
+  }
+
+  .marquee-content {
+    display: flex;
+    animation: scroll 20s linear infinite;
+  }
+
+  .marquee-content span {
+    padding: 0 3rem;
+  }
+
+  @keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* --- SHARED SECTION STYLES --- */
+  section {
+    padding: 8rem 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 4rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    letter-spacing: -1px;
+  }
+
+  /* --- BENTO GRID (FEATURES) --- */
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 320px;
+    gap: 1.5rem;
+  }
+
+  .bento-item {
+    background: var(--bg-surface);
+    border-radius: 20px;
+    padding: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: background 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bento-item:hover {
+    background: var(--bg-surface-hover);
+    transform: translateY(-5px);
+    border-color: rgba(232, 93, 4, 0.5);
+  }
+
+  .bento-item h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    z-index: 2;
+  }
+
+  .bento-item p {
+    color: var(--text-muted);
+    font-size: 1rem;
+    z-index: 2;
+  }
+
+  .item-large {
+    grid-column: span 2;
+    grid-row: span 2;
+    background: linear-gradient(145deg, var(--bg-surface) 0%, #080808 100%);
+  }
+
+  .item-wide { grid-column: span 2; }
+
+  /* --- AMENITIES LIST --- */
+  .archive-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .archive-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border-color);
+    transition: padding 0.3s ease, background 0.3s ease;
+  }
+
+  .archive-item:hover {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background: rgba(232, 93, 4, 0.05);
+  }
+
+  .archive-item h3 {
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-weight: 500;
+  }
+
+  .archive-item span {
+    color: var(--accent);
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  /* --- BOOKING FORM --- */
+  .membership-wrapper {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    padding: 4rem 5%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+
+  .membership-info h2 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+
+  .membership-info p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 1rem;
+    background: var(--bg-base);
+    border: 1px solid var(--border-color);
+    color: var(--text-main);
+    border-radius: 8px;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  /* --- FOOTER --- */
+  footer {
+    padding: 5rem 5% 2rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+    background: var(--bg-base);
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    letter-spacing: -2px;
+    color: rgba(255,255,255,0.03); /* Keeps 'The' transparent/dim */
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+  }
+
+  .footer-logo .logo-accent {
+    color: var(--accent); /* Changes 'Athenaeum' to Rusty Orange */
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+  }
+
+  .footer-links a:hover { color: var(--accent); }
+
+  /* --- RESPONSIVE DESIGN --- */
+  @media (max-width: 1024px) {
+    .bento-grid { grid-template-columns: repeat(2, 1fr); }
+    .membership-wrapper { grid-template-columns: 1fr; gap: 2rem; padding: 3rem; }
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; } 
+    .menu-toggle { display: flex; } 
+    
+    /* FIX FOR HERO TEXT HIDING ON MOBILE */
+    .hero { 
+      padding-top: 140px; 
+      justify-content: flex-start; 
+    }
+    .hero h1 {
+      font-size: clamp(3.2rem, 12vw, 4rem);
+    }
+    
+    .bento-grid { grid-template-columns: 1fr; grid-auto-rows: auto; }
+    .item-large, .item-wide { grid-column: span 1; grid-row: span 1; }
+    .bento-item { min-height: 250px; }
+
+    .archive-item h3 { font-size: 1.2rem; }
+    .cta-group { flex-direction: column; width: 100%; }
+    .btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav>
+    <a href="#home" class="logo">The <span class="logo-accent">Athenaeum</span></a>
+    <div class="nav-links">
+      <a href="#features">Environment</a>
+      <a href="#amenities">Amenities</a>
+      <a href="#booking">Book a Seat</a>
+    </div>
+    <div class="menu-toggle" id="mobile-menu-btn">
+      <span class="bar1"></span>
+      <span class="bar2"></span>
+      <span class="bar3"></span>
+    </div>
+  </nav>
+
+  <!-- MOBILE MENU OVERLAY -->
+  <div class="mobile-menu-overlay" id="mobile-overlay">
+    <a href="#features" class="mobile-link">Environment</a>
+    <a href="#amenities" class="mobile-link">Amenities</a>
+    <a href="#booking" class="mobile-link">Book a Seat</a>
+  </div>
+
+  <!-- HERO SECTION -->
+  <header id="home" class="hero">
+    <h1>Your Silent<br><span style="color: var(--accent);">Sanctuary.</span></h1>
+    <p>Bring your own books. We provide the perfect environment. Fully air-conditioned, high-speed Wi-Fi, and pin-drop silence—all at an affordable price.</p>
+    <div class="cta-group">
+      <a href="#booking" class="btn btn-primary">Book a Seat</a>
+      <a href="#features" class="btn btn-secondary">View Amenities</a>
+    </div>
+  </header>
+
+  <!-- TICKER -->
+  <div class="marquee-wrapper">
+    <div class="marquee-content">
+      <span>✦ Pin-Drop Silence</span>
+      <span>✦ Fully Air Conditioned</span>
+      <span>✦ 24/7 Access</span>
+      <span>✦ High-Speed Wi-Fi</span>
+      <span>✦ Affordable Pricing</span>
+      <!-- Duplicated for seamless loop -->
+      <span>✦ Pin-Drop Silence</span>
+      <span>✦ Fully Air Conditioned</span>
+      <span>✦ 24/7 Access</span>
+      <span>✦ High-Speed Wi-Fi</span>
+      <span>✦ Affordable Pricing</span>
+    </div>
+  </div>
+
+  <!-- BENTO GRID SECTION (FEATURES) -->
+  <section id="features">
+    <div class="section-header">
+      <h2 class="section-title">The Environment</h2>
+    </div>
+    
+    <div class="bento-grid">
+      <div class="bento-item item-large">
+        <div>
+          <h3 style="font-size: 3rem; margin-bottom: 1rem; color: var(--accent);">Pin-Drop<br>Silence.</h3>
+          <p>An acoustically treated environment ensuring absolutely zero distractions. Your focus is our highest priority.</p>
+        </div>
+      </div>
+
+      <div class="bento-item">
+        <h3>24/7 Access</h3>
+        <p>Study on your own schedule. Early morning or late at night, your seat is waiting for you.</p>
+      </div>
+
+      <div class="bento-item">
+        <h3>Climate Control</h3>
+        <p>Premium air conditioning running round-the-clock to keep you comfortable during long study sessions.</p>
+      </div>
+
+      <div class="bento-item item-wide">
+        <h3>High-Speed Wi-Fi</h3>
+        <p>Unlimited, ultra-fast internet connectivity for your online lectures, mock tests, and research needs.</p>
+        <div style="margin-top: 1.5rem; display: flex; gap: 1rem;">
+          <span style="background: rgba(232, 93, 4, 0.2); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: bold;">Fibre Optic</span>
+          <span style="background: rgba(232, 93, 4, 0.2); color: var(--accent); padding: 5px 15px; border-radius: 50px; font-size: 0.8rem; font-weight: bold;">Zero Lag</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AMENITIES SECTION -->
+  <section id="amenities">
+    <div class="section-header">
+      <h2 class="section-title">Premium Amenities</h2>
+      <p style="color: var(--text-muted); max-width: 400px; text-align: right;">Everything you need to study comfortably, included in your affordable plan.</p>
+    </div>
+    <div class="archive-list">
+      <div class="archive-item">
+        <h3>Ergonomic Seating & Spacious Desks</h3>
+        <span>Included</span>
+      </div>
+      <div class="archive-item">
+        <h3>RO Purified Drinking Water</h3>
+        <span>Included</span>
+      </div>
+      <div class="archive-item">
+        <h3>CCTV Security Surveillance</h3>
+        <span>Included</span>
+      </div>
+      <div class="archive-item">
+        <h3>Personal Locker Facility</h3>
+        <span>Available</span>
+      </div>
+      <div class="archive-item">
+        <h3>100% Power Backup</h3>
+        <span>Included</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING SECTION (WHATSAPP INTEGRATION) -->
+  <section id="booking">
+    <div class="membership-wrapper">
+      <div class="membership-info">
+        <h2>Reserve Your Spot.</h2>
+        <p>Enter your details below. Clicking 'Book a Seat' will instantly redirect you to our WhatsApp so we can confirm your seat availability and pricing.</p>
+        <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px; color: var(--text-muted);">
+          <li>✓ Highly affordable monthly plans.</li>
+          <li>✓ Dedicated fixed seating options.</li>
+          <li>✓ Quick & easy WhatsApp booking.</li>
+        </ul>
+      </div>
+      
+      <form id="bookingForm">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="userName" required placeholder="Enter your name">
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" id="userEmail" required placeholder="Enter your email">
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="userPhone" required placeholder="Enter your phone number">
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Book a Seat</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-links">
+      <a href="#">Location: Asthawan, Bihar</a>
+      <a href="#">Open 24/7</a>
+      <a href="#">Affordable Plans</a>
+      <a href="#">Contact Support</a>
+    </div>
+    <!-- Footer logo with transparent "The" and Rusty Orange "Athenaeum" -->
+    <div class="footer-logo">The <span class="logo-accent">Athenaeum</span></div>
+    <p style="color: var(--text-muted); font-size: 0.8rem;">&copy; 2026 The Athenaeum Study Space. All rights reserved.</p>
+  </footer>
+
+  <!-- INTERACTIVE JAVASCRIPT -->
+  <script>
+    // --- Mobile Menu Logic ---
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileOverlay = document.getElementById('mobile-overlay');
+    const mobileLinks = document.querySelectorAll('.mobile-link');
+    let menuOpen = false;
+
+    function toggleMenu() {
+      menuOpen = !menuOpen;
+      if (menuOpen) {
+        mobileOverlay.classList.add('open');
+        menuBtn.children[0].style.transform = 'rotate(45deg) translate(5px, 5px)';
+        menuBtn.children[1].style.opacity = '0';
+        menuBtn.children[2].style.transform = 'rotate(-45deg) translate(7px, -7px)';
+      } else {
+        mobileOverlay.classList.remove('open');
+        menuBtn.children[0].style.transform = 'none';
+        menuBtn.children[1].style.opacity = '1';
+        menuBtn.children[2].style.transform = 'none';
+      }
+    }
+
+    menuBtn.addEventListener('click', toggleMenu);
+
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        if (menuOpen) toggleMenu();
+      });
+    });
+
+    // --- WhatsApp Booking Logic ---
+    document.getElementById('bookingForm').addEventListener('submit', function(event) {
+      event.preventDefault(); 
+      
+      const name = document.getElementById('userName').value;
+      const email = document.getElementById('userEmail').value;
+      const phone = document.getElementById('userPhone').value;
+
+      // *************************************************************
+      // IMPORTANT: REPLACE THE NUMBER BELOW WITH THE OWNER'S WHATSAPP NUMBER
+      // Ensure the country code is included without the '+' symbol (e.g., 91 for India)
+      // *************************************************************
+      const ownerWhatsAppNumber = "910000000000"; 
+      
+      const message = `Hello, I would like to book a seat at the library.\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Email:* ${email}\n\nPlease let me know if a seat is currently available.`;
+      const encodedMessage = encodeURIComponent(message);
+      
+      const whatsappURL = `https://wa.me/${ownerWhatsAppNumber}?text=${encodedMessage}`;
+      window.open(whatsappURL, '_blank');
+      this.reset();
+    });
+  </script>
+</body>
+</html>
